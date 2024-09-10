@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
-import { EmpleadosListadoComponent } from './empleados-listado/empleados-listado.component';  // Importa tu componente
+import { EmpleadosListadoComponent } from './empleados-listado/empleados-listado.component';
+import { EmpleadosFormComponent } from './empleados-form/empleados-form.component';  // Nombre correcto
 
-// Definimos las rutas de la aplicación
 export const routes: Routes = [
-  { path: 'empleados', component: EmpleadosListadoComponent },  // Ruta para mostrar la tabla de empleados
-  { path: '', redirectTo: '/empleados', pathMatch: 'full' }      // Redirección por defecto a la tabla de empleados
+  { path: 'empleados', component: EmpleadosListadoComponent },  // Listado de empleados
+  { path: 'empleado-form', component: EmpleadosFormComponent },  // Formulario para agregar o editar empleados
+  { path: '', redirectTo: '/empleados', pathMatch: 'full' }  // Redirección por defecto
 ];

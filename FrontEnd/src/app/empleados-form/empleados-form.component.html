@@ -1,0 +1,21 @@
+<h2>Formulario de Empleados</h2>
+<form (ngSubmit)="guardarEmpleado()">
+  <label for="nombre">Nombre</label>
+  <input id="nombre" [(ngModel)]="empleado.nombre" name="nombre" required />
+
+  <label for="apellido">Apellido</label>
+  <input id="apellido" [(ngModel)]="empleado.apellido" name="apellido" required />
+
+  <label for="cargo">Cargo</label>
+  <input id="cargo" [(ngModel)]="empleado.cargo" name="cargo" required />
+
+  <label for="fechaContratacion">Fecha de Contratación</label>
+  <input id="fechaContratacion" type="date" [(ngModel)]="empleado.fechaContratacion" name="fechaContratacion" required />
+
+  <label for="departamento">Departamento</label>
+  <select id="departamento" [(ngModel)]="empleado.departamento" name="departamento">
+    <option *ngFor="let departamento of departamentos" [value]="departamento">{{ departamento }}</option>
+  </select>
+
+  <button type="submit">Guardar</button>
+</form>

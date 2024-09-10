@@ -1,0 +1,55 @@
+# ---- Node.js / Angular (Frontend) ----
+# Node modules (librerías instaladas de NPM)
+node_modules/
+
+# Angular build output (carpetas generadas al compilar)
+dist/
+build/
+
+# Logs y archivos temporales de npm/yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Archivos de TypeScript compilados
+*.tsbuildinfo
+
+# Cache de npm
+.npm/
+
+# ---- Python / Flask (Backend) ----
+# Python archivos compilados
+__pycache__/
+*.py[cod]
+*.so
+
+# Entorno virtual de Python (venv)
+venv/
+
+# Flask instance y logs
+instance/
+*.log
+
+# Environment variables (Variables de entorno)
+.env
+
+# ---- Sistema operativo Windows ----
+# Archivos generados por Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ---- macOS (si usas macOS en algún momento) ----
+.DS_Store
+
+# ---- Visual Studio Code ----
+# Configuraciones locales de VSCode (que no son necesarias para otros desarrolladores)
+.vscode/
+
+# ---- Git ----
+# Ignorar archivos generados por Git
+.git/
+
+# ---- Temporary files (archivos temporales) ----
+*.tmp
+*.swp

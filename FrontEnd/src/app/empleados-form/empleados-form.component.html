@@ -1,34 +1,41 @@
 <h2 class="form-title">{{ isEditing ? 'Editar Empleado' : 'Agregar Empleado' }}</h2>
 
-<form (ngSubmit)="onSubmit()" class="employee-form">
+<form (ngSubmit)="onSubmit()" #empleadoForm="ngForm" class="employee-form">
   <div class="form-group">
     <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" [(ngModel)]="empleado.nombre" name="nombre" required class="form-input"/>
+    <input type="text" id="nombre" [(ngModel)]="empleado.nombre" name="nombre" required #nombre="ngModel" class="form-input" />
+    <div *ngIf="nombre.invalid && nombre.touched" class="error">El nombre es obligatorio</div>
   </div>
 
   <div class="form-group">
     <label for="apellido">Apellido:</label>
-    <input type="text" id="apellido" [(ngModel)]="empleado.apellido" name="apellido" required class="form-input"/>
+    <input type="text" id="apellido" [(ngModel)]="empleado.apellido" name="apellido" required #apellido="ngModel" class="form-input" />
+    <div *ngIf="apellido.invalid && apellido.touched" class="error">El apellido es obligatorio</div>
   </div>
 
   <div class="form-group">
     <label for="cargo">Cargo:</label>
-    <input type="text" id="cargo" [(ngModel)]="empleado.cargo" name="cargo" required class="form-input"/>
+    <input type="text" id="cargo" [(ngModel)]="empleado.cargo" name="cargo" required #cargo="ngModel" class="form-input" />
+    <div *ngIf="cargo.invalid && cargo.touched" class="error">El cargo es obligatorio</div>
   </div>
 
   <div class="form-group">
     <label for="fechaContratacion">Fecha de Contratación:</label>
-    <input type="date" id="fechaContratacion" [(ngModel)]="empleado.fechaContratacion" name="fechaContratacion" required class="form-input"/>
+    <input type="date" id="fechaContratacion" [(ngModel)]="empleado.fechaContratacion" name="fechaContratacion" required #fechaContratacion="ngModel" class="form-input" />
+    <div *ngIf="fechaContratacion.invalid && fechaContratacion.touched" class="error">La fecha de contratación es obligatoria</div>
   </div>
 
   <div class="form-group">
     <label for="departamento">Departamento:</label>
-    <select id="departamento" [(ngModel)]="empleado.departamento" name="departamento" required class="form-select">
-      <option *ngFor="let departamento of departamentos" [value]="departamento.id">
-        {{ departamento.id }} - {{ departamento.nombre }}
+    <select id="departamento" [(ngModel)]="empleado.departamento" name="departamento" required #departamento="ngModel" class="form-select">
+      <option *ngFor="let dept of departamentos" [value]="dept.id">
+        {{ dept.nombre }}
       </option>
     </select>
+    <div *ngIf="departamento.invalid && departamento.touched" class="error">El departamento es obligatorio</div>
   </div>
 
-  <button type="submit" class="form-button">{{ isEditing ? 'Guardar Cambios' : 'Agregar Empleado' }}</button>
+  <button type="submit" [disabled]="empleadoForm.invalid" class="form-button">
+    {{ isEditing ? 'Guardar Cambios' : 'Agregar Empleado' }}
+  </button>
 </form>

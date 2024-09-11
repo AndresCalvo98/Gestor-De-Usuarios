@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';  // Importar CommonModule
 import { Router } from '@angular/router';
 import { EmpleadosService } from '../empleados.service';
+import { CommonModule } from '@angular/common';  // Importa CommonModule
 
 @Component({
   selector: 'app-empleados-listado',
@@ -19,6 +19,7 @@ export class EmpleadosListadoComponent implements OnInit {
     this.getEmpleados();
   }
 
+  // Obtener empleados desde el backend
   getEmpleados(): void {
     this.empleadosService.getEmpleados().subscribe(
       data => {
@@ -30,19 +31,26 @@ export class EmpleadosListadoComponent implements OnInit {
     );
   }
 
+  // Eliminar empleado y actualizar la lista
+  eliminarEmpleado(id: number): void {
+    const confirmacion = confirm('¿Estás seguro de que deseas eliminar este empleado?');
+    if (confirmacion) {
+      this.empleadosService.deleteEmpleado(id).subscribe(() => {
+        console.log(`Empleado con ID ${id} eliminado`);
+        this.getEmpleados();  // Refrescar la lista después de eliminar
+      }, error => {
+        console.error('Error al eliminar empleado:', error);
+      });
+    }
+  }
+
+  // Redirigir al formulario de edición de empleados
   editarEmpleado(empleado: any): void {
     this.router.navigate(['/empleado-form', { empleado: JSON.stringify(empleado) }]);
   }
 
-  eliminarEmpleado(id: number): void {
-    this.empleadosService.deleteEmpleado(id).subscribe(() => {
-      this.getEmpleados();  // Refrescar la lista después de eliminar
-    }, error => {
-      console.error('Error al eliminar empleado:', error);
-    });
-  }
-
+  // Redirigir al formulario de agregar un nuevo empleado
   agregarEmpleado(): void {
-    this.router.navigate(['/empleado-form']);
+    this.router.navigate(['/empleado-form']);  // Redirigir al formulario de agregar empleados
   }
 }

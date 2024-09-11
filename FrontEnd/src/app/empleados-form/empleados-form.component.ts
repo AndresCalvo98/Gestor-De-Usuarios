@@ -13,6 +13,7 @@ import { EmpleadosService } from '../empleados.service';
 })
 export class EmpleadosFormComponent implements OnInit {
   empleado: any = { nombre: '', apellido: '', cargo: '', fechaContratacion: '', departamento: 'TI' };
+  departamentos: any[] = [];  // Para almacenar los departamentos
   isEditing = false;
 
   constructor(
@@ -22,6 +23,11 @@ export class EmpleadosFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Obtener los departamentos al cargar el componente
+    this.empleadosService.getDepartamentos().subscribe(data => {
+      this.departamentos = data;
+    });
+
     const empleadoData = this.route.snapshot.paramMap.get('empleado');
     if (empleadoData) {
       this.empleado = JSON.parse(empleadoData);

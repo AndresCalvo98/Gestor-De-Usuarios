@@ -1,42 +1,67 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpleadosService {
-  private apiUrl = 'http://localhost:5000/empleados';
-
-  // Datos quemados en caso de que no haya conexión al backend
-  private empleadosData = [
-    { id: 1, nombre: 'Luis', apellido: 'García', departamento: 'TI', cargo: 'Desarrollador', fechaContratacion: '2023-01-01' },
-    { id: 2, nombre: 'Ana', apellido: 'Pérez', departamento: 'Marketing', cargo: 'Analista', fechaContratacion: '2022-07-15' }
-  ];
+  private apiUrl = 'http://localhost:5000/api/empleados/';  // URL del backend para empleados
+  private departamentosUrl = 'http://localhost:5000/api/departamentos/';  // URL del backend para departamentos
 
   constructor(private http: HttpClient) {}
 
-  getEmpleados(): Observable<any> {
-    // Si el backend no responde, devolvemos los datos quemados
-    return of(this.empleadosData);
-  }
+  // Manejo de errores
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = '';
 
-  addEmpleado(empleado: any): Observable<any> {
-    empleado.id = this.empleadosData.length + 1;  // Asignar un nuevo ID al empleado
-    this.empleadosData.push(empleado);  // Agregar el nuevo empleado a los datos quemados
-    return of(empleado);
-  }
-
-  updateEmpleado(id: number, empleado: any): Observable<any> {
-    const index = this.empleadosData.findIndex(emp => emp.id === id);
-    if (index !== -1) {
-      this.empleadosData[index] = empleado;
+    if (error.error instanceof ErrorEvent) {
+      // Error del lado del cliente o de la red
+      errorMessage = `Error del lado del cliente: ${error.error.message}`;
+    } else {
+      // El backend devolvió un código de estado de error
+      errorMessage = `Error del servidor: Código ${error.status}, ` +
+                     `Mensaje: ${error.message}`;
     }
-    return of(empleado);
+    // Aquí puedes registrar el error para análisis futuro
+    console.error(errorMessage);
+    // Retorna un observable con el mensaje de error para que el frontend pueda reaccionar
+    return throwError(() => new Error(errorMessage));
   }
 
+  // Obtener la lista de empleados
+  getEmpleados(): Observable<any> {
+    return this.http.get(this.apiUrl).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Agregar un nuevo empleado
+  addEmpleado(empleado: any): Observable<any> {
+    return this.http.post(this.apiUrl, empleado).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Actualizar un empleado existente
+  updateEmpleado(id: number, empleado: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}${id}`, empleado).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Eliminar un empleado
   deleteEmpleado(id: number): Observable<any> {
-    this.empleadosData = this.empleadosData.filter(emp => emp.id !== id);
-    return of({ message: 'Empleado eliminado' });
+    return this.http.delete(`${this.apiUrl}${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // Obtener la lista de departamentos
+  getDepartamentos(): Observable<any> {
+    return this.http.get(this.departamentosUrl).pipe(
+      catchError(this.handleError)
+    );
   }
 }

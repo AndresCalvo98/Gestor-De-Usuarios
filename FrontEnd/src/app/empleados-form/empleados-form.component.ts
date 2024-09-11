@@ -45,8 +45,7 @@ export class EmpleadosFormComponent implements OnInit {
     } else {
       this.empleadosService.addEmpleado(this.empleado).subscribe(() => {
         this.router.navigate(['/empleados']).then(() => {
-          // Recargar empleados y departamentos después de agregar
-          window.location.reload(); // Recargar la página después de agregar el empleado para actualizar la lista
+          this.empleadosService.getEmpleados().subscribe(); // Asegúrate de que se recarguen los empleados después de agregar
         });
       }, error => {
         console.error('Error al agregar empleado:', error);

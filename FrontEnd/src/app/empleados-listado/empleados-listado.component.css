@@ -1,0 +1,92 @@
+
+body {
+  background-color: red !important;  /* Cambia esto por tu imagen o color de prueba */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.list-title {
+  text-align: center;
+  color: #fff;  /* Cambia el color a blanco para que destaque sobre el fondo */
+  margin-bottom: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: rgba(0, 0, 0, 0.7);  /* Fondo negro semitransparente */
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.add-button {
+  display: block;
+  margin: 0 auto 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+.employee-table {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: rgba(255, 255, 255, 0.9);  /* Fondo blanco semitransparente para la tabla */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.employee-table th, .employee-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.employee-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.employee-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.action-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #218838;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}

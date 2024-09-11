@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmpleadosService } from '../empleados.service';
 import { CommonModule } from '@angular/common';  // Importa CommonModule
+import { forkJoin } from 'rxjs';  // Importa forkJoin para manejar múltiples observables
 
 @Component({
   selector: 'app-empleados-listado',
@@ -17,30 +18,24 @@ export class EmpleadosListadoComponent implements OnInit {
   constructor(private empleadosService: EmpleadosService, private router: Router) {}
 
   ngOnInit(): void {
-    this.getEmpleados();
-    this.getDepartamentos();  // Obtener también los departamentos al iniciar
+    // Cargar empleados y departamentos al iniciar el componente
+    this.cargarEmpleadosYDepartamentos();
   }
 
-  // Obtener empleados desde el backend
-  getEmpleados(): void {
-    this.empleadosService.getEmpleados().subscribe(
-      data => {
-        this.empleados = data;
+  // Función para cargar empleados y departamentos
+  cargarEmpleadosYDepartamentos(): void {
+    forkJoin({
+      empleados: this.empleadosService.getEmpleados(),
+      departamentos: this.empleadosService.getDepartamentos()
+    }).subscribe(
+      result => {
+        this.empleados = result.empleados;
+        this.departamentos = result.departamentos;
+        console.log('Empleados:', this.empleados);
+        console.log('Departamentos:', this.departamentos);
       },
       error => {
-        console.error('Error al obtener empleados:', error);
-      }
-    );
-  }
-
-  // Obtener departamentos desde el backend
-  getDepartamentos(): void {
-    this.empleadosService.getDepartamentos().subscribe(
-      data => {
-        this.departamentos = data;
-      },
-      error => {
-        console.error('Error al obtener departamentos:', error);
+        console.error('Error al cargar empleados y departamentos:', error);
       }
     );
   }
@@ -48,7 +43,7 @@ export class EmpleadosListadoComponent implements OnInit {
   // Función para obtener el nombre del departamento basado en su ID
   getDepartamentoNombre(departamentoId: number): string {
     const departamento = this.departamentos.find(dept => dept.id === departamentoId);
-    return departamento ? departamento.nombre : 'Desconocido';  // Si no encuentra el departamento, muestra 'Desconocido'
+    return departamento ? departamento.nombre : 'Desconocido';
   }
 
   // Eliminar empleado y actualizar la lista
@@ -57,7 +52,7 @@ export class EmpleadosListadoComponent implements OnInit {
     if (confirmacion) {
       this.empleadosService.deleteEmpleado(id).subscribe(() => {
         console.log(`Empleado con ID ${id} eliminado`);
-        this.getEmpleados();  // Refrescar la lista después de eliminar
+        this.cargarEmpleadosYDepartamentos();  // Recargar empleados y departamentos después de eliminar
       }, error => {
         console.error('Error al eliminar empleado:', error);
       });
@@ -71,6 +66,8 @@ export class EmpleadosListadoComponent implements OnInit {
 
   // Redirigir al formulario de agregar un nuevo empleado
   agregarEmpleado(): void {
-    this.router.navigate(['/empleado-form']);  // Redirigir al formulario de agregar empleados
+    this.router.navigate(['/empleado-form']).then(() => {
+      this.cargarEmpleadosYDepartamentos(); // Asegúrate de recargar empleados y departamentos después de agregar
+    });
   }
 }

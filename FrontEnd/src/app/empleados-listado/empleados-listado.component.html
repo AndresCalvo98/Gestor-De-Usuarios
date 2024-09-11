@@ -1,16 +1,16 @@
-<h2>Listado de Empleados</h2>
+<h2 class="list-title">Listado de Empleados</h2>
 
 <!-- Botón para agregar un nuevo empleado -->
-<button (click)="agregarEmpleado()">Agregar Empleado</button>
+<button (click)="agregarEmpleado()" class="add-button">Agregar Empleado</button>
 
-<table>
+<table class="employee-table">
   <thead>
     <tr>
       <th>ID</th>
       <th>Nombre</th>
       <th>Apellido</th>
-      <th>ID Departamento</th>  <!-- Columna para mostrar el ID del departamento -->
-      <th>Nombre Departamento</th>  <!-- Columna para mostrar el nombre del departamento -->
+      <th>ID Departamento</th>
+      <th>Nombre Departamento</th>
       <th>Cargo</th>
       <th>Fecha de Contratación</th>
       <th>Acciones</th>
@@ -21,13 +21,13 @@
       <td>{{ empleado.id }}</td>
       <td>{{ empleado.nombre }}</td>
       <td>{{ empleado.apellido }}</td>
-      <td>{{ empleado.departamento }}</td>  <!-- Muestra el ID del departamento -->
-      <td>{{ getDepartamentoNombre(empleado.departamento) }}</td>  <!-- Muestra el nombre del departamento -->
+      <td>{{ empleado.departamento }}</td>
+      <td>{{ getDepartamentoNombre(empleado.departamento) }}</td>
       <td>{{ empleado.cargo }}</td>
       <td>{{ empleado.fechaContratacion }}</td>
       <td>
-        <button (click)="editarEmpleado(empleado)">Editar</button>
-        <button (click)="eliminarEmpleado(empleado.id)">Eliminar</button>
+        <button (click)="editarEmpleado(empleado)" class="action-button edit-button">Editar</button>
+        <button (click)="eliminarEmpleado(empleado.id)" class="action-button delete-button">Eliminar</button>
       </td>
     </tr>
   </tbody>

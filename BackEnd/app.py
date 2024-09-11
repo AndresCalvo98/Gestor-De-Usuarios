@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_restx import Api, Resource
-from flask_cors import CORS  # Importar CORS para habilitar solicitudes desde otros orígenes
+from flask_cors import CORS
 import datetime
 
 # Crear la aplicación Flask
 app = Flask(__name__)
 
-# Configuración de CORS: Permitir solicitudes solo desde el frontend Angular (localhost:4200)
+# Configuración de CORS
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 
 # Crear la API con el prefijo /api
@@ -64,8 +64,13 @@ class EmpleadoResource(Resource):
             if field not in data or not data[field]:
                 return {"message": f"El campo '{field}' es requerido."}, 400
         
-        # Validar que el departamento exista por ID
-        departamento = next((dept for dept in departamentos if dept['id'] == data['departamento']), None)
+        # Validar que el departamento sea un número y que exista por ID
+        try:
+            departamento_id = int(data['departamento'])
+        except ValueError:
+            return {"message": "El ID del departamento debe ser un número."}, 400
+
+        departamento = next((dept for dept in departamentos if dept['id'] == departamento_id), None)
         if not departamento:
             return {"message": "Departamento inválido. ID de departamento no encontrado."}, 400
         
@@ -77,7 +82,14 @@ class EmpleadoResource(Resource):
             return {"message": "Fecha de contratación inválida. El formato debe ser YYYY-MM-DD."}, 400
         
         # Actualizar los datos del empleado
-        empleado.update(data)
+        empleado.update({
+            "nombre": data['nombre'],
+            "apellido": data['apellido'],
+            "departamento": departamento_id,  # Asignar el ID del departamento correcto
+            "cargo": data['cargo'],
+            "fechaContratacion": data['fechaContratacion']
+        })
+
         return empleado, 200
 
     def delete(self, id):

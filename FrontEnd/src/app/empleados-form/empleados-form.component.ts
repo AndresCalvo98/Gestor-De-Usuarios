@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EmpleadosService } from '../empleados.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EmpleadosService } from '../empleados.service';
 
 @Component({
   selector: 'app-empleados-form',
@@ -12,7 +12,7 @@ import { EmpleadosService } from '../empleados.service';
   styleUrls: ['./empleados-form.component.css']
 })
 export class EmpleadosFormComponent implements OnInit {
-  empleado: any = { nombre: '', apellido: '', cargo: '', fechaContratacion: '', departamento: 'TI' };
+  empleado: any = { nombre: '', apellido: '', cargo: '', fechaContratacion: '', departamento: '' };
   departamentos: any[] = [];  // Para almacenar los departamentos
   isEditing = false;
 
@@ -44,7 +44,10 @@ export class EmpleadosFormComponent implements OnInit {
       });
     } else {
       this.empleadosService.addEmpleado(this.empleado).subscribe(() => {
-        this.router.navigate(['/empleados']);
+        this.router.navigate(['/empleados']).then(() => {
+          // Recargar empleados y departamentos después de agregar
+          window.location.reload(); // Recargar la página después de agregar el empleado para actualizar la lista
+        });
       }, error => {
         console.error('Error al agregar empleado:', error);
       });

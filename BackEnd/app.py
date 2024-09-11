@@ -14,8 +14,8 @@ api = Api(app, prefix="/api")
 
 # Simulación de base de datos para empleados
 empleados = [
-    {"id": 1, "nombre": "Luis", "apellido": "García", "departamento": "TI", "cargo": "Desarrollador", "fechaContratacion": "2023-01-01"},
-    {"id": 2, "nombre": "Ana", "apellido": "Pérez", "departamento": "Marketing", "cargo": "Analista", "fechaContratacion": "2022-07-15"}
+    {"id": 1, "nombre": "Luis", "apellido": "García", "departamento": 1, "cargo": "Desarrollador", "fechaContratacion": "2023-01-01"},
+    {"id": 2, "nombre": "Ana", "apellido": "Pérez", "departamento": 2, "cargo": "Analista", "fechaContratacion": "2022-07-15"}
 ]
 
 # Simulación de base de datos para departamentos
@@ -24,9 +24,6 @@ departamentos = [
     {"id": 2, "nombre": "Marketing"},
     {"id": 3, "nombre": "RRHH"}
 ]
-
-# Lista de departamentos permitidos
-departamentos_validos = ["TI", "Marketing", "RRHH"]
 
 # Definir un namespace para las rutas de empleados
 ns_empleados = api.namespace('empleados', description='Operaciones relacionadas con empleados')
@@ -67,9 +64,10 @@ class EmpleadoResource(Resource):
             if field not in data or not data[field]:
                 return {"message": f"El campo '{field}' es requerido."}, 400
         
-        # Validar que el departamento sea válido
-        if data['departamento'] not in departamentos_validos:
-            return {"message": "Departamento inválido. Los departamentos válidos son: TI, Marketing, RRHH."}, 400
+        # Validar que el departamento exista por ID
+        departamento = next((dept for dept in departamentos if dept['id'] == data['departamento']), None)
+        if not departamento:
+            return {"message": "Departamento inválido. ID de departamento no encontrado."}, 400
         
         # Validar que la fecha de contratación tenga un formato correcto
         try:
@@ -96,6 +94,13 @@ class DepartamentosResource(Resource):
     def get(self):
         # Obtener todos los departamentos
         return jsonify(departamentos)
+
+    def post(self):
+        # Agregar un nuevo departamento
+        nuevo_departamento = request.json
+        nuevo_departamento['id'] = max([dept['id'] for dept in departamentos]) + 1 if departamentos else 1
+        departamentos.append(nuevo_departamento)
+        return nuevo_departamento, 201
 
 if __name__ == '__main__':
     app.run(debug=True)

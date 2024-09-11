@@ -23,9 +23,10 @@
 
   <div>
     <label for="departamento">Departamento:</label>
+    <!-- Ahora seleccionamos por el ID del departamento -->
     <select id="departamento" [(ngModel)]="empleado.departamento" name="departamento" required>
-      <option *ngFor="let departamento of departamentos" [value]="departamento.nombre">
-        {{ departamento.nombre }}
+      <option *ngFor="let departamento of departamentos" [value]="departamento.id">
+        {{ departamento.id }} - {{ departamento.nombre }}
       </option>
     </select>
   </div>

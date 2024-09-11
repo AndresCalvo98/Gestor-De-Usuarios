@@ -9,7 +9,8 @@
       <th>ID</th>
       <th>Nombre</th>
       <th>Apellido</th>
-      <th>Departamento</th>
+      <th>ID Departamento</th>  <!-- Columna para mostrar el ID del departamento -->
+      <th>Nombre Departamento</th>  <!-- Columna para mostrar el nombre del departamento -->
       <th>Cargo</th>
       <th>Fecha de Contratación</th>
       <th>Acciones</th>
@@ -20,7 +21,8 @@
       <td>{{ empleado.id }}</td>
       <td>{{ empleado.nombre }}</td>
       <td>{{ empleado.apellido }}</td>
-      <td>{{ empleado.departamento }}</td>
+      <td>{{ empleado.departamento }}</td>  <!-- Muestra el ID del departamento -->
+      <td>{{ getDepartamentoNombre(empleado.departamento) }}</td>  <!-- Muestra el nombre del departamento -->
       <td>{{ empleado.cargo }}</td>
       <td>{{ empleado.fechaContratacion }}</td>
       <td>
